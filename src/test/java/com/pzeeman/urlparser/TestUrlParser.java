@@ -126,7 +126,7 @@ public class TestUrlParser {
 
     @Test
     public void parseUrl_NoQueryParams() throws MalformedURLException {
-        String validUrl = buildUrl(protocolHttps,usernamePzeeman,passwordl33t,hostwww_Pzeeman_com,port2112,pathTest,refValidUrl,null);
+        String validUrl = buildUrl(protocolHttps,usernamePzeeman,passwordl33t,hostwww_Pzeeman_com,port2112,pathTest,refValidUrl,(String)null);
 
         ParsedUrl parsedUrl = testUrlParser.getParsedUrl(validUrl);
 
@@ -177,7 +177,7 @@ public class TestUrlParser {
 
     @Test(expected = MalformedURLException.class)
     public void parseUrl_Malformed() throws MalformedURLException {
-        ParsedUrl parsedUrl = testUrlParser.getParsedUrl("www.rush.com");
+        ParsedUrl parsedUrl = testUrlParser.getParsedUrl("http://www.1.rush.com");
     }
 
     /**
