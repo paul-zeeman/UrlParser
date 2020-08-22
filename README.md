@@ -13,4 +13,4 @@ Accepts a String object and attempts to parse that string using RFC 3986. See ht
 
  * **Parameters:** `inputUrl` — a String in the expected format of scheme://authority/path?query#fragment
  * **Returns:** a ParsedUrl object containing the elements of the URL
- * **Exceptions:** `MalformedURLException` — 
+ * **Exceptions:** `MalformedURLException` — When a required part of the URL is missing or misformatted
