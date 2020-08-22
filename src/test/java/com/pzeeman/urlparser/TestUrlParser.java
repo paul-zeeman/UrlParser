@@ -3,7 +3,6 @@ package com.pzeeman.urlparser;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mock;
 
 import java.net.MalformedURLException;
 import java.util.Arrays;
@@ -18,6 +17,7 @@ public class TestUrlParser {
     final int port2112 = 2112;
     final String pathTest = "this/is/a/test";
     final String queryParamProject = "project=Url";
+    final String queryParamWithSpace = "movie=Star%20Wars";
     final String queryParamTest = "test";
     final String refValidUrl = "validUrl";
 
@@ -26,7 +26,7 @@ public class TestUrlParser {
 
     @Test
     public void parseUrl_Complete_ExpectSuccess() throws MalformedURLException {
-        String validUrl = buildUrl(protocolHttps,usernamePzeeman,passwordl33t,hostwww_Pzeeman_com,port2112,pathTest,refValidUrl,queryParamProject,queryParamTest);
+        String validUrl = buildUrl(protocolHttps,usernamePzeeman,passwordl33t,hostwww_Pzeeman_com,port2112,pathTest,refValidUrl,queryParamProject,queryParamTest,queryParamWithSpace);
 
         ParsedUrl parsedUrl = testUrlParser.getParsedUrl(validUrl);
 
@@ -36,9 +36,9 @@ public class TestUrlParser {
         Assert.assertEquals(hostwww_Pzeeman_com, parsedUrl.getHost());
         Assert.assertEquals(port2112, parsedUrl.getPort());
         Assert.assertEquals(pathTest, parsedUrl.getPath().substring(1));
-        Assert.assertEquals(2,parsedUrl.getQueryParameters().size());
+        Assert.assertEquals(3,parsedUrl.getQueryParameters().size());
         // Need a test for the values in the query parameters map
-        Assert.assertEquals(refValidUrl, parsedUrl.getFragment());
+        Assert.assertEquals(refValidUrl, parsedUrl.getRef());
     }
 
     @Test
@@ -55,7 +55,7 @@ public class TestUrlParser {
         Assert.assertEquals(pathTest, parsedUrl.getPath().substring(1));
         Assert.assertEquals(2,parsedUrl.getQueryParameters().size());
         // Need a test for the values in the query parameters map
-        Assert.assertEquals(refValidUrl, parsedUrl.getFragment());
+        Assert.assertEquals(refValidUrl, parsedUrl.getRef());
     }
     @Test
     public void parseUrl_NoPassword() throws MalformedURLException {
@@ -71,7 +71,7 @@ public class TestUrlParser {
         Assert.assertEquals(pathTest, parsedUrl.getPath().substring(1));
         Assert.assertEquals(2,parsedUrl.getQueryParameters().size());
         // Need a test for the values in the query parameters map
-        Assert.assertEquals(refValidUrl, parsedUrl.getFragment());
+        Assert.assertEquals(refValidUrl, parsedUrl.getRef());
     }
 
     @Test
@@ -88,7 +88,7 @@ public class TestUrlParser {
         Assert.assertEquals(pathTest, parsedUrl.getPath().substring(1));
         Assert.assertEquals(2,parsedUrl.getQueryParameters().size());
         // Need a test for the values in the query parameters map
-        Assert.assertEquals(refValidUrl, parsedUrl.getFragment());
+        Assert.assertEquals(refValidUrl, parsedUrl.getRef());
     }
     @Test
     public void parseUrl_NoPath() throws MalformedURLException {
@@ -104,7 +104,7 @@ public class TestUrlParser {
         Assert.assertEquals(0, parsedUrl.getPath().substring(1).length());
         Assert.assertEquals(2,parsedUrl.getQueryParameters().size());
         // Need a test for the values in the query parameters map
-        Assert.assertEquals(refValidUrl, parsedUrl.getFragment());
+        Assert.assertEquals(refValidUrl, parsedUrl.getRef());
     }
 
     @Test
@@ -121,7 +121,7 @@ public class TestUrlParser {
         Assert.assertEquals(pathTest, parsedUrl.getPath().substring(1));
         Assert.assertEquals(2,parsedUrl.getQueryParameters().size());
         // Need a test for the values in the query parameters map
-        Assert.assertEquals(null, parsedUrl.getFragment());
+        Assert.assertEquals(null, parsedUrl.getRef());
     }
 
     @Test
@@ -138,7 +138,7 @@ public class TestUrlParser {
         Assert.assertEquals(pathTest, parsedUrl.getPath().substring(1));
         Assert.assertEquals(0,parsedUrl.getQueryParameters().size());
         // Need a test for the values in the query parameters map
-        Assert.assertEquals(refValidUrl, parsedUrl.getFragment());
+        Assert.assertEquals(refValidUrl, parsedUrl.getRef());
     }
 
     @Test
@@ -155,7 +155,7 @@ public class TestUrlParser {
         Assert.assertEquals(pathTest, parsedUrl.getPath().substring(1));
         Assert.assertEquals(1,parsedUrl.getQueryParameters().size());
         // Need a test for the values in the query parameters map
-        Assert.assertEquals(refValidUrl, parsedUrl.getFragment());
+        Assert.assertEquals(refValidUrl, parsedUrl.getRef());
     }
 
     @Test
@@ -172,14 +172,17 @@ public class TestUrlParser {
         Assert.assertEquals(pathTest, parsedUrl.getPath().substring(1));
         Assert.assertEquals(1,parsedUrl.getQueryParameters().size());
         // Need a test for the values in the query parameters map
-        Assert.assertEquals(refValidUrl, parsedUrl.getFragment());
+        Assert.assertEquals(refValidUrl, parsedUrl.getRef());
     }
 
     @Test(expected = MalformedURLException.class)
     public void parseUrl_Malformed() throws MalformedURLException {
-        ParsedUrl parsedUrl = testUrlParser.getParsedUrl("http://1.2.3.4.5.6.7:h");
+        ParsedUrl parsedUrl = testUrlParser.getParsedUrl("www.rush.com");
     }
 
+    /**
+     * This is a helper method to build a URL String out of componment parts
+     */
     private String buildUrl(String protocol,
                             String username,
                             String password,
