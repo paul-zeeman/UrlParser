@@ -27,7 +27,7 @@ public class UrlParser {
         // We're going to leverage the java.net.URL class to some of the heavy lifting
         URL url = new URL(inputUrl);
 
-        returnParsedUrl.setProtocol(url.getProtocol());
+        returnParsedUrl.setScheme(url.getProtocol());
         // If there is user info, separate out the username and password
         if (url.getUserInfo() != null) {
             returnParsedUrl.setUsername(getUsernameFromUserInfo(url.getUserInfo()));
@@ -41,12 +41,18 @@ public class UrlParser {
         int port = url.getPort();
         // If no port was provided in the input string, we can assume the default value of 80
         if (url.getPort() < 1)
-            port = 80;
+            // For reasons I don't understand, the default port sometimes doesn't work
+            port = url.getDefaultPort();
         returnParsedUrl.setPort(port);
+
+        String authority = url.getUserInfo()+"@"+url.getHost()+":"+url.getPort();
+        returnParsedUrl.setAuthority(authority);
+
         returnParsedUrl.setPath(url.getPath());
+        returnParsedUrl.setQuery(url.getQuery());
         // Let's break out the query parameters into a map
         returnParsedUrl.setQueryParameters(getParamaterMapFromQuery(url.getQuery()));
-        returnParsedUrl.setRef(url.getRef());
+        returnParsedUrl.setFragment(url.getRef());
 
         return returnParsedUrl;
     }
@@ -72,14 +78,17 @@ public class UrlParser {
 
         //Using a Regular Expression, pull out the password
 
-            Pattern passwordPattern = Pattern.compile(":([^:]+)");
-            Matcher passwordMatcher = passwordPattern.matcher(userInfo);
+        Pattern passwordPattern = Pattern.compile(":([^:]+)");
+        Matcher passwordMatcher = passwordPattern.matcher(userInfo);
 
-            if (passwordMatcher.find()) {
-                password = passwordMatcher.group(1);
-            } else {
-                System.out.println("No password in " + userInfo);
-            }
+        if (passwordMatcher.find()) {
+            password = passwordMatcher.group(1);
+        } else {
+            System.out.println("No password in " + userInfo);
+            // Address the case where if there is a username and not a password, it comes back as an empty string
+            // Make it null for consistency
+            password = null;
+        }
 
         return password;
     }
