@@ -45,7 +45,10 @@ public class UrlParser {
             port = url.getDefaultPort();
         returnParsedUrl.setPort(port);
 
-        String authority = url.getUserInfo()+"@"+url.getHost()+":"+url.getPort();
+        String authority = new String();
+        if (url.getUserInfo() != null)
+            authority += url.getUserInfo()+"@";
+        authority += host+":"+port;
         returnParsedUrl.setAuthority(authority);
 
         returnParsedUrl.setPath(url.getPath());

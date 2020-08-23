@@ -23,10 +23,12 @@ import java.util.Map;
  * getHost - String - Returns the host parsed from the input URL - REQUIRED
  * getPort - int - Returns the port parsed from the input URL - OPTIONAL
  *    value is the default port for the protocol if no port was provided
- * getPath - String - Returns the path parsed from the input URL - OPTIONAL
- *    value is null if no path was provided
- * getQueryParameters - Map<String, String> - Returns the query parameters parsed from the input URL - OPTIONAL
+ * getPath - String - Returns the path parsed from the input URL with no leading '/' - OPTIONAL
+ *    value is empty string if no path was provided
+ * getQuery - String - Returns the complete query portion of the input URL - OPTIONAL
  *    value is null if no query was provided
+ * getQueryParameters - Map<String, String> - Returns the query parameters parsed from the input URL - OPTIONAL
+ *    value is an empty map if no query was provided
  *    note: A query key can be present with a null value
  * getFragment - String - Returns the document reference parsed from the input URL - OPTIONAL
  *    value is null if no fragment was provided
